@@ -1,0 +1,26 @@
+// /api/clerk/webhook
+
+import { db } from "@/server/db";
+
+export const POST = async (req: Request) => {
+  const { data } = await req.json();
+  const emailAddress = data.email_addresses[0].email_address;
+  const firstname = data.first_name;
+  const lastname = data.last_name;
+  const imageUrl = data.image_url;
+  const id = data.id;
+
+  await db.user.create({
+    data: {
+      id: id,
+      emailAddress: emailAddress,
+      firstname: firstname,
+      lastname: lastname,
+      imageUrl: imageUrl,
+    },
+  });
+
+  console.log("user created");
+
+  return new Response("Webhook received", { status: 200 });
+};
